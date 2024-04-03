@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>페이지 분할</title>
+<style>
+  .hidden {
+    display: none;
+  }
+</style>
+</head>
+<body>
+<button id="btnPage1">페이지 1</button>
+<button id="btnPage2">페이지 2</button>
+
+<section id="page1">
+  <h2>페이지 1 내용</h2>
+  <p>이곳에 페이지 1의 내용을 적어주세요.</p>
+</section>
+
+<section id="page2" class="hidden">
+  <h2>페이지 2 내용</h2>
+  <p>이곳에 페이지 2의 내용을 적어주세요.</p>
+</section>
+
+<script>
+  document.getElementById("btnPage1").addEventListener("click", function() {
+    document.getElementById("page1").classList.remove("hidden");
+    document.getElementById("page2").classList.add("hidden");
+  });
+
+  document.getElementById("btnPage2").addEventListener("click", function() {
+    document.getElementById("page1").classList.add("hidden");
+    document.getElementById("page2").classList.remove("hidden");
+  });
+</script>
+</body>
+</html>
