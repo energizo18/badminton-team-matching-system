@@ -31,10 +31,31 @@
     appId: "1:763372323613:web:3d8c7b9a13906b4ed157f4",
     measurementId: "G-QVXHW5Z12S"
   };
-  
+
   // Firebase 인스턴스 초기화
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
+
+  $("#playerSaveBtn").click(async function () {
+    let image_url = "https://occ-0-1123-1217.1.nflxso.net/dnm/api/v6/6AYY37jfdO6hpXcMjf9Yu5cnmO0/AAAABeIfo7VL_VDyKnljV66IkR-4XLb6xpZqhpLSo3JUtbivnEW4s60PD27muH1mdaANM_8rGpgbm6L2oDgA_iELHZLZ2IQjG5lvp5d2.jpg?r=e6e.jpg";
+    let name = "테슷흐";
+    let height = 170;
+    let weight = 70;
+    let skillfulness = 3;
+
+    let doc = {
+      'image_url': image_url,
+      'name': name,
+      'height': height,
+      'weight': weight,
+      'skillfulness': skillfulness
+    };
+    await addDoc(collection(db, "Player"), doc);
+    alert("저장 완료");
+    window.location.reload();
+  })
+
+
 
 
   $("#btnPage1").click(function () {
@@ -49,6 +70,33 @@
     $("#page2").show();
     $("#btnPage1").css("color", "#D7D7D7");
     $("#btnPage2").css("color", "#000000");
+  })
+
+  let docs = await getDocs(collection(db, "Player"));
+  docs.forEach((doc) => {
+    let row = doc.data();
+
+    let image_url = row['image_url'];
+    let name = row['name'];
+    let height = row['height'];
+    let weight = row['weight'];
+    let skillfulness = row['skillfulness'];
+
+    let tempCard = `            
+            <div class="col">
+                <div class="card h-100">
+                    <img src="${image_url}"
+                        class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">${name}</h5>
+                        <p class="card-text">${skillfulness}</p>
+                        <p class="card-text">${weight}</p>
+                    </div>
+                </div>
+            </div>
+            `
+    $('#playerCards').append(tempCard)
+    console.log(image_url, name);
   })
 
 
@@ -69,11 +117,12 @@
     width: 100%;
     margin: 0 auto;
   }
+
   .header .header-img {
     position: relative;
   }
 
-  .header .header-img img{
+  .header .header-img img {
     max-width: 1920px;
     width: 100%;
     opacity: 0.7;
@@ -89,11 +138,12 @@
     align-items: center;
   }
 
-  .header .header-img .h-text-wrapper p{
+  .header .header-img .h-text-wrapper p {
     font-size: 64px;
     font-weight: 800;
     text-align: center;
   }
+
   .button-wrapper {
     display: flex;
   }
@@ -122,31 +172,38 @@
   #page2 {
     display: none;
   }
-
 </style>
 
 <body>
-      <div class="header">
-        <div class="header-img">
-          <img src="./img/00_header.png">
-          <div class="h-text-wrapper">
-            <p>Badminton</br>Team Matching System</p>
-          </div>
-        </div>
-
-        <div class="button-wrapper">
-          <div class="button" id="btnPage1">선수 등록</div>
-          <div class="button" id="btnPage2">대진표 생성</div>
-        </div>
+  <div class="header">
+    <div class="header-img">
+      <img src="./img/00_header.png">
+      <div class="h-text-wrapper">
+        <p>Badminton</br>Team Matching System</p>
       </div>
+    </div>
 
-      <div id="page1" style="font-size: 20px; color: #000000;">
-        선수 등록 코드 작성
-      </div>
+    <div class="button-wrapper">
+      <div class="button" id="btnPage1">선수 등록</div>
+      <div class="button" id="btnPage2">대진표 생성</div>
+    </div>
+  </div>
 
-      <div id="page2" style="font-size: 20px; color: #000000;">
-        대진표 생성 코드 작성
+  <div id="page1" style="font-size: 20px; color: #000000;">
+    선수 등록 코드 작성
+    <div id="playerSaveBtn">선수 저장하기</div>
+
+    <div class="playerCards">
+      <div class="row row-cols-1 row-cols-md-4 g-4" id="playerCards">
+
       </div>
+    </div>
+
+  </div>
+
+  <div id="page2" style="font-size: 20px; color: #000000;">
+    대진표 생성 코드 작성
+  </div>
 </body>
 
 </html>
