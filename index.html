@@ -23,40 +23,25 @@
   // Firebase 구성 정보 설정
   // For Firebase JS SDK v7.20.0 and later, measurementId is optional
   const firebaseConfig = {
-    apiKey: "AIzaSyCro5I35ptAcauh3rnca4LZflcxWPiFxxM",
-    authDomain: "sparta-4a72b.firebaseapp.com",
-    projectId: "sparta-4a72b",
-    storageBucket: "sparta-4a72b.appspot.com",
-    messagingSenderId: "763372323613",
-    appId: "1:763372323613:web:3d8c7b9a13906b4ed157f4",
-    measurementId: "G-QVXHW5Z12S"
+    apiKey: "AIzaSyB2_ObMenmN8nzfhNt7c9sG2v-JmmLABw4",
+    authDomain: "energizo.firebaseapp.com",
+    projectId: "energizo",
+    storageBucket: "energizo.appspot.com",
+    messagingSenderId: "896594345305",
+    appId: "1:896594345305:web:0fc405a876a216d8f42048"
   };
 
   // Firebase 인스턴스 초기화
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  $("#playerSaveBtn").click(async function () {
-    let image_url = "https://occ-0-1123-1217.1.nflxso.net/dnm/api/v6/6AYY37jfdO6hpXcMjf9Yu5cnmO0/AAAABeIfo7VL_VDyKnljV66IkR-4XLb6xpZqhpLSo3JUtbivnEW4s60PD27muH1mdaANM_8rGpgbm6L2oDgA_iELHZLZ2IQjG5lvp5d2.jpg?r=e6e.jpg";
-    let name = "테슷흐";
-    let height = 170;
-    let weight = 70;
-    let skillfulness = 3;
-
-    let doc = {
-      'image_url': image_url,
-      'name': name,
-      'height': height,
-      'weight': weight,
-      'skillfulness': skillfulness
+  $("#registeringbtn").click(async function () {
+    let doc = { 'image_url': "https://occ-0-1123-1217.1.nflxso.net/dnm/api/v6/6AYY37jfdO6hpXcMjf9Yu5cnmO0/AAAABeIfo7VL_VDyKnljV66IkR-4XLb6xpZqhpLSo3JUtbivnEW4s60PD27muH1mdaANM_8rGpgbm6L2oDgA_iELHZLZ2IQjG5lvp5d2.jpg?r=e6e.jpg",
+     'name': "choi", 'age': 24 , 'height': 157, 'weight': 52, 'skillfullness': 5
     };
-    await addDoc(collection(db, "Player"), doc);
-    alert("저장 완료");
+    await addDoc(collection(db, "player"), doc);
     window.location.reload();
   })
-
-
-
 
   $("#btnPage1").click(function () {
     $("#page2").hide();
@@ -72,7 +57,7 @@
     $("#btnPage2").css("color", "#000000");
   })
 
-  let docs = await getDocs(collection(db, "Player"));
+  let docs = await getDocs(collection(db, "player"));
   docs.forEach((doc) => {
     let row = doc.data();
 
@@ -191,14 +176,13 @@
 
   <div id="page1" style="font-size: 20px; color: #000000;">
     선수 등록 코드 작성
-    <div id="playerSaveBtn">선수 저장하기</div>
+    <button id="registeringbtn" type="button">등록하기</button>
 
     <div class="playerCards">
       <div class="row row-cols-1 row-cols-md-4 g-4" id="playerCards">
 
       </div>
     </div>
-
   </div>
 
   <div id="page2" style="font-size: 20px; color: #000000;">
