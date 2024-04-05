@@ -23,18 +23,22 @@
   // Firebase 구성 정보 설정
   // For Firebase JS SDK v7.20.0 and later, measurementId is optional
   const firebaseConfig = {
-    apiKey: "AIzaSyCro5I35ptAcauh3rnca4LZflcxWPiFxxM",
-    authDomain: "sparta-4a72b.firebaseapp.com",
-    projectId: "sparta-4a72b",
-    storageBucket: "sparta-4a72b.appspot.com",
-    messagingSenderId: "763372323613",
-    appId: "1:763372323613:web:3d8c7b9a13906b4ed157f4",
-    measurementId: "G-QVXHW5Z12S"
+    apiKey: "AIzaSyB2_ObMenmN8nzfhNt7c9sG2v-JmmLABw4",
+    authDomain: "energizo.firebaseapp.com",
+    projectId: "energizo",
+    storageBucket: "energizo.appspot.com",
+    messagingSenderId: "896594345305",
+    appId: "1:896594345305:web:0fc405a876a216d8f42048"
   };
-  
+
   // Firebase 인스턴스 초기화
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
+
+  $("#registeringbtn").click(async function () {
+    let doc = { 'name': "choi", 'age': 24 , 'height': 157, 'weight': 52, 'skillfullness': 5};
+    await addDoc(collection(db, "player"), doc);
+  })
 
 
   $("#btnPage1").click(function () {
@@ -69,11 +73,12 @@
     width: 100%;
     margin: 0 auto;
   }
+
   .header .header-img {
     position: relative;
   }
 
-  .header .header-img img{
+  .header .header-img img {
     max-width: 1920px;
     width: 100%;
     opacity: 0.7;
@@ -89,11 +94,12 @@
     align-items: center;
   }
 
-  .header .header-img .h-text-wrapper p{
+  .header .header-img .h-text-wrapper p {
     font-size: 64px;
     font-weight: 800;
     text-align: center;
   }
+
   .button-wrapper {
     display: flex;
   }
@@ -122,31 +128,31 @@
   #page2 {
     display: none;
   }
-
 </style>
 
 <body>
-      <div class="header">
-        <div class="header-img">
-          <img src="./img/00_header.png">
-          <div class="h-text-wrapper">
-            <p>Badminton</br>Team Matching System</p>
-          </div>
-        </div>
-
-        <div class="button-wrapper">
-          <div class="button" id="btnPage1">선수 등록</div>
-          <div class="button" id="btnPage2">대진표 생성</div>
-        </div>
+  <div class="header">
+    <div class="header-img">
+      <img src="./img/00_header.png">
+      <div class="h-text-wrapper">
+        <p>Badminton</br>Team Matching System</p>
       </div>
+    </div>
 
-      <div id="page1" style="font-size: 20px; color: #000000;">
-        선수 등록 코드 작성
-      </div>
+    <div class="button-wrapper">
+      <div class="button" id="btnPage1">선수 등록</div>
+      <div class="button" id="btnPage2">대진표 생성</div>
+    </div>
+  </div>
 
-      <div id="page2" style="font-size: 20px; color: #000000;">
-        대진표 생성 코드 작성
-      </div>
+  <div id="page1" style="font-size: 20px; color: #000000;">
+    선수 등록 코드 작성
+    <button id="registeringbtn" type="button">등록하기</button>
+  </div>
+
+  <div id="page2" style="font-size: 20px; color: #000000;">
+    대진표 생성 코드 작성
+  </div>
 </body>
 
 </html>
