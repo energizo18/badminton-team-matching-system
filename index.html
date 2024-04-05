@@ -65,7 +65,7 @@
     let name = row['name'];
     let height = row['height'];
     let weight = row['weight'];
-    let skillfulness = row['skillfulness'];
+    let skillfullness = row['skillfullness'];
 
     let tempCard = `            
             <div class="col">
@@ -74,8 +74,9 @@
                         class="card-img-top" alt="...">
                     <div class="card-body">
                         <h5 class="card-title">${name}</h5>
-                        <p class="card-text">${skillfulness}</p>
-                        <p class="card-text">${weight}</p>
+                        <p class="card-text">키: ${height}</p>
+                        <p class="card-text">몸무게: ${weight}</p>
+                        <p class="card-text">실력: ${skillfullness}</p>
                     </div>
                 </div>
             </div>
