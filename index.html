@@ -170,32 +170,35 @@
     width: 100%;
     margin: 0 auto;
   }
+/*제목부분*/
+  .header {
 
-  .header .header-img {
+    height: 300px;
     position: relative;
   }
 
-  .header .header-img img {
-    max-width: 1920px;
-    width: 100%;
-    opacity: 0.7;
-  }
-
-  .header .header-img .h-text-wrapper {
-    display: flex;
+  .header::before {
+    content: "";
+    background: url(https://github.com/energizo18/badminton-team-matching-system/blob/main/img/00_header.png?raw=true);
+    background-size: cover;
+    opacity: 0.4;
     position: absolute;
-    top: 32%;
-    left: 50%;
-    transform: translateX(-50%);
-    flex-direction: column;
-    align-items: center;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
   }
 
-  .header .header-img .h-text-wrapper p {
-    font-size: 64px;
-    font-weight: 800;
+  .header h1 {
+
+    padding-top: 100px;
+    color: black;
     text-align: center;
+    
+    position: relative;
   }
+
+  /*제목부분*/
 
   .button-wrapper {
     display: flex;
@@ -262,16 +265,14 @@
   }
 
   /* 모달 스타일 끝*/
+
 </style>
 
 <body>
   <div class="header">
-    <div class="header-img">
-      <img src="./img/00_header.png">
-      <div class="h-text-wrapper">
-        <p>Badminton</br>Team Matching System</p>
+        <h1>Badminton<br>Team Matching System</h1>
       </div>
-    </div>
+   
 
     <div class="button-wrapper">
       <div class="button" id="btnPage1">선수 등록</div>
@@ -328,7 +329,6 @@
       <div class="row row-cols-1 row-cols-md-2 g-2" id="playerCards2">
 
       </div>
-
 
 </body>
 
