@@ -44,7 +44,7 @@
     window.location.reload();
   })
 
-  //대진표 생성 버튼 기능
+  //대진표 생성 버튼 기능 작성
   $("#tablebtn").click(async function () {
     let docs = await getDocs(collection(db, "player"));
     docs.forEach((doc) => {
