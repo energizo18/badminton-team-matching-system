@@ -62,10 +62,10 @@
 
     let image_url = $('#image_url').val();
     let name = $('#name').val();
-    let age = $('#age').val();
-    let height = $('#height').val();
-    let weight = $('#weight').val();
-    let skillfullness = $('#skillfullness').val();
+    let age = Number($('#age').val());
+    let height = Number($('#height').val());
+    let weight = Number($('#weight').val());
+    let skillfullness = Number($('#skillfullness').val());
 
     console.log(age)
     let doc = {
