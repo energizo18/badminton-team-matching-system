@@ -35,21 +35,58 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
+  // 모달 창 표시 및 종료를 위한 JavaScript 코드
+  var modal = document.getElementById("myModal");
+  var btn = document.getElementById("modalBtn");
+  var span = document.getElementsByClassName("btn-close")[0];
+
+  // 모달 버튼 클릭 시 모달 보임
+  btn.onclick = function () {
+    modal.style.display = "block";
+  }
+
+  // 닫기 버튼 클릭 시 모달 닫힘
+  span.onclick = function () {
+    modal.style.display = "none";
+  }
+
+  //모달 아닌 쪽 클릭 시 모달 닫힘 기능
+  window.onclick = function (event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
+
+  // 선수 정보 저장 버튼
   $("#registeringbtn").click(async function () {
+
+    let image_url = $('#image_url').val();
+    let name = $('#name').val();
+    let age = $('#age').val();
+    let height = $('#height').val();
+    let weight = $('#weight').val();
+    let skillfullness = $('#skillfullness').val();
+
+    console.log(age)
     let doc = {
-      'image_url': "https://occ-0-1123-1217.1.nflxso.net/dnm/api/v6/6AYY37jfdO6hpXcMjf9Yu5cnmO0/AAAABeIfo7VL_VDyKnljV66IkR-4XLb6xpZqhpLSo3JUtbivnEW4s60PD27muH1mdaANM_8rGpgbm6L2oDgA_iELHZLZ2IQjG5lvp5d2.jpg?r=e6e.jpg",
-      'name': "choi", 'age': 24, 'height': 157, 'weight': 52, 'skillfullness': 5
+      'image_url': image_url,
+      'name': name,
+      'age': age,
+      'height': height,
+      'weight': weight,
+      'skillfullness': skillfullness
     };
     await addDoc(collection(db, "player"), doc);
     window.location.reload();
   })
 
-  //대진표 생성 버튼 기능 작성
+  //대진표 생성 버튼 기능
+
   $("#tablebtn").click(async function () {
     let docs = await getDocs(collection(db, "player"));
     docs.forEach((doc) => {
       let row = doc.data();
-      
+
       let image_url = row['image_url'];
       let name = row['name'];
       let height = row['height'];
@@ -133,32 +170,35 @@
     width: 100%;
     margin: 0 auto;
   }
+/*제목부분*/
+  .header {
 
-  .header .header-img {
+    height: 300px;
     position: relative;
   }
 
-  .header .header-img img {
-    max-width: 1920px;
-    width: 100%;
-    opacity: 0.7;
-  }
-
-  .header .header-img .h-text-wrapper {
-    display: flex;
+  .header::before {
+    content: "";
+    background: url(https://github.com/energizo18/badminton-team-matching-system/blob/main/img/00_header.png?raw=true);
+    background-size: cover;
+    opacity: 0.4;
     position: absolute;
-    top: 32%;
-    left: 50%;
-    transform: translateX(-50%);
-    flex-direction: column;
-    align-items: center;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
   }
 
-  .header .header-img .h-text-wrapper p {
-    font-size: 64px;
-    font-weight: 800;
+  .header h1 {
+
+    padding-top: 100px;
+    color: black;
     text-align: center;
+    
+    position: relative;
   }
+
+  /*제목부분*/
 
   .button-wrapper {
     display: flex;
@@ -189,21 +229,50 @@
     display: none;
   }
 
-  #playerCards2{
-    font-size : 30px;
-    width : 1000px;
+  #playerCards2 {
+    font-size: 30px;
+    width: 1000px;
   }
-  
+
+  /* 모달 스타일 */
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    font-size: 20px;
+  }
+
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 30%;
+  }
+
+  /* 모달 종료 버튼 스타일 */
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 50px;
+    font-weight: bold;
+  }
+
+  /* 모달 스타일 끝*/
+
 </style>
 
 <body>
   <div class="header">
-    <div class="header-img">
-      <img src="./img/00_header.png">
-      <div class="h-text-wrapper">
-        <p>Badminton</br>Team Matching System</p>
+        <h1>Badminton<br>Team Matching System</h1>
       </div>
-    </div>
+   
 
     <div class="button-wrapper">
       <div class="button" id="btnPage1">선수 등록</div>
@@ -213,7 +282,7 @@
 
   <div id="page1" style="font-size: 20px; color: #000000;">
     선수 등록 코드 작성
-    <button id="registeringbtn" type="button">등록하기</button>
+    <button id="modalBtn">선수 정보 입력</button>
 
     <div class="playerCards">
       <div class="row row-cols-1 row-cols-md-4 g-4" id="playerCards">
@@ -222,6 +291,36 @@
     </div>
   </div>
 
+  <!-- 모달 -->
+  <div id="myModal" class="modal" id="registering_modal">
+    <div class="modal-content">
+      <form>
+        <p>선수 등록 창</p>
+        <label for="name">이미지 주소:</label><br>
+        <input type="text" id="image_url" name="image_url"><br>
+
+        <label for="name">이름:</label><br>
+        <input type="text" id="name" name="name"><br>
+
+        <label for="age">나이:</label><br>
+        <input type="number" id="age" name="age"><br>
+
+        <label for="height">신장:</label><br>
+        <input type="number" id="height" name="height"><br>
+
+        <label for="weight">몸무게:</label><br>
+        <input type="number" id="weight" name="weight"><br>
+
+        <label for="skillfullness">실력:</label><br>
+        <input type="number" id="skillfullness" name="skillfullness"><br>
+
+        <input type="button" value="제출" id="registeringbtn">
+        <button type="button" class="btn-close" id="close_modal">닫기</button>
+      </form>
+    </div>
+  </div>
+  <!-- 모달 끝-->
+
   <div id="page2" style="font-size: 20px; color: #000000;">
     대진표 생성 코드 작성
     <button id="tablebtn" type="button">대진표 생성</button>
@@ -229,7 +328,8 @@
     <div class="playerCards2">
       <div class="row row-cols-1 row-cols-md-2 g-2" id="playerCards2">
 
-  </div>
+      </div>
+
 </body>
 
 </html>
