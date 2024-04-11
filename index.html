@@ -101,23 +101,19 @@
       let randomDocuments = getRandomElements(filteredDocuments, 4);
 
       // 이전에 추가된 카드를 제거합니다.
-      $('#playerCards2').empty();
+      $('#group').empty();
 
       // 선택된 문서들을 이용하여 카드를 생성하고 출력합니다.
       randomDocuments.forEach(doc => {
-        let tempCard2 = `
-                <div class="col">
-                    <div class="card h-100">
-                        <img src="${doc.image_url}" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">${doc.name}</h5>
-                            <p class="card-text">실력: ${doc.skillfullness}</p>
-                        </div>
-                    </div>
-                </div>
+        let temp_profile = `
+        <div class="playerprofile" id="playerprofile">
+        <img src="${doc.image_url}" width:"150" height:"150">
+        <h5>${doc.name}(${doc.age})<br>${doc.skillfullness}<br>${doc.height}cm<br>${doc.weight}kg<br></h5>
+      </div>
+      
             `;
-        $('#playerCards2').append(tempCard2);
-        //console.log(doc.image_url, doc.name);
+        $('#group').append(temp_profile);
+        //console.log(doc);
       });
     } catch (error) {
       console.error("Error getting documents: ", error);
@@ -176,12 +172,12 @@
             <div class="col">
                 <div class="card h-100">
                     <img src="${image_url}"
-                        class="card-img-top" alt="...">
+               class="card-img-top" alt="...">
                     <div class="card-body">
-                        <h5 class="card-title">${name}</h5>
-                        <p class="card-text">키: ${height}</p>
-                        <p class="card-text">몸무게: ${weight}</p>
-                        <p class="card-text">실력: ${skillfullness}</p>
+                      <h5 class="card-title">${name}</h5>
+                      <p class="card-text">키: ${height}</p>
+                       <p class="card-text">몸무게: ${weight}</p>
+                       <p class="card-text">실력: ${skillfullness}</p>
                     </div>
                 </div>
             </div>
@@ -269,12 +265,7 @@
     text-align: center;
   }
 
-  #playerCards2 {
-    font-size: 30px;
-    width: 1000px;
-    text-align: center;
-    margin : auto;
-  }
+
 
   /* 모달 스타일 */
   .modal {
@@ -307,6 +298,56 @@
   }
 
   /* 모달 스타일 끝*/
+
+
+  .tournament {
+    background-color: blanchedalmond;
+    height: 750px;
+    background-position: center;
+    background-size: cover;
+  }
+
+  .image {
+    background-image: url(https://i.ibb.co/GHJxTTV/image.png);
+    background-position: center;
+    background-size: cover;
+    margin-left: 650px;
+
+    width: 430px;
+    height: 740px
+  }
+
+  .group {
+    display: inline-block;
+
+    margin-left: 251px;
+    position: relative;
+    left: -245px
+  }
+
+  .playerprofile {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: pink;
+    position: relative;
+    left: 675px;
+    top: -650px;
+    text-align: left;
+
+
+
+
+  }
+
+  .playerprofile h5 {
+    position: relative;
+    top: -200px;
+    left: -1000px;
+
+  }
+
+  
 </style>
 
 <body>
@@ -377,10 +418,24 @@
 
     <button id="tablebtn" type="button">대진표 생성</button>
 
-    <div class="playerCards2">
-      <div class="row row-cols-1 row-cols-md-2 g-2" id="playerCards2">
+    <div class="tournament" id="tournament">
+      <div class="image"></div>
+
+      <div class="group" id="group">
 
       </div>
+    </div>
+  </div>
+
+
+  </div>
+  <button id="tablebtn" type="button">대진표 생성</button>
+
+  <div class="playerCards2">
+    <div class="row row-cols-1 row-cols-md-2 g-2" id="playerCards2">
+
+    </div>
+
 
 
 
