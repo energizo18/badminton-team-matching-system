@@ -4,10 +4,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>페이지 분할</title>
+  <title>배드민턴 대진표 생성</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 
 
@@ -35,48 +36,113 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
+  // 모달 창 표시 및 종료를 위한 JavaScript 코드
+  var modal = document.getElementById("myModal");
+  var btn = document.getElementById("modalBtn");
+  var span = document.getElementsByClassName("btn-close")[0];
+
+  // 모달 버튼 클릭 시 모달 보임
+  btn.onclick = function () {
+    modal.style.display = "block";
+  }
+
+  // 닫기 버튼 클릭 시 모달 닫힘
+  span.onclick = function () {
+    modal.style.display = "none";
+  }
+
+  //모달 아닌 쪽 클릭 시 모달 닫힘 기능
+  window.onclick = function (event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
+
+  // 선수 정보 저장 버튼
   $("#registeringbtn").click(async function () {
+
+    let image_url = $('#image_url').val();
+    let name = $('#name').val();
+    let age = Number($('#age').val());
+    let height = Number($('#height').val());
+    let weight = Number($('#weight').val());
+    let skillfullness = Number($('#skillfullness').val());
+
+    console.log(age)
     let doc = {
-      'image_url': "https://occ-0-1123-1217.1.nflxso.net/dnm/api/v6/6AYY37jfdO6hpXcMjf9Yu5cnmO0/AAAABeIfo7VL_VDyKnljV66IkR-4XLb6xpZqhpLSo3JUtbivnEW4s60PD27muH1mdaANM_8rGpgbm6L2oDgA_iELHZLZ2IQjG5lvp5d2.jpg?r=e6e.jpg",
-      'name': "choi", 'age': 24, 'height': 157, 'weight': 52, 'skillfullness': 5
+      'image_url': image_url,
+      'name': name,
+      'age': age,
+      'height': height,
+      'weight': weight,
+      'skillfullness': skillfullness
     };
     await addDoc(collection(db, "player"), doc);
     window.location.reload();
   })
 
+
   //대진표 생성 버튼 기능
   $("#tablebtn").click(async function () {
-    let docs = await getDocs(collection(db, "player"));
-    docs.forEach((doc) => {
-      let row = doc.data();
+    try {
+      // 선택된 skillfullness 값 가져오기
+      let selectedSkill = $("#skillDropdown").val();
 
-      let image_url = row['image_url'];
-      let name = row['name'];
-      let height = row['height'];
-      let weight = row['weight'];
-      let skillfullness = row['skillfullness'];
+      // Firestore 컬렉션 'player'에서 문서를 가져옵니다.
+      let querySnapshot = await getDocs(collection(db, "player"));
 
-      let tempCard = `            
-      <div class="group">
-        <div class="playerprofile">          
-          <h5>${name}(${skillfullness})</h5>
-        </div>
-        <div class="playerprofile2">          
-          <h5>${name}(${skillfullness})</h5>
-        </div>
-        <div class="playerprofile3">          
-          <h5>${name}(${skillfullness})</h5>
-        </div>
-        <div class="playerprofile4">          
-          <h5>${name}(${skillfullness})</h5>
-        </div>
+      // 가져온 문서들을 배열로 변환합니다.
+      let documents = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+      // 선택된 skillfullness 값에 따라 문서들을 필터링합니다.
+      let filteredDocuments = documents.filter(doc => doc.skillfullness == selectedSkill);
+
+      // 랜덤하게 4개의 문서를 선택합니다.
+      let randomDocuments = getRandomElements(filteredDocuments, 4);
+
+      // 이전에 추가된 카드를 제거합니다.
+      $('#group').empty();
+
+      // 선택된 문서들을 이용하여 카드를 생성하고 출력합니다.
+      randomDocuments.forEach(doc => {
+        let temp_profile = `
+        <div class="playerprofile" id="playerprofile">
+        <img src="${doc.image_url}" width:"150" height:"150">
+        <h5>${doc.name}(${doc.age})<br>${doc.skillfullness}<br>${doc.height}cm<br>${doc.weight}kg<br></h5>
       </div>
-            `
-      $('#tournament').empty();
-      $('#tournament').append(tempCard);
-      console.log(image_url, name);
-    });
-  })
+      
+            `;
+        $('#group').append(temp_profile);
+        //console.log(doc);
+      });
+    } catch (error) {
+      console.error("Error getting documents: ", error);
+    }
+  });
+
+  // 배열에서 랜덤하게 n개의 요소를 선택하는 함수
+  function getRandomElements(arr, n) {
+    let result = [];
+    let len = arr.length;
+    // 선택할 요소 수가 배열의 길이보다 클 경우, 배열의 길이로 설정
+    if (n > len) {
+      n = len;
+      console.warn("getRandomElements: more elements requested than available, returning all elements");
+    }
+    let taken = new Array(len);
+    while (n--) {
+      let x = Math.floor(Math.random() * len);
+      // 이미 선택된 요소를 다시 선택하지 않도록 확인
+      while (taken[x]) {
+        x = Math.floor(Math.random() * len);
+      }
+      result.push(arr[x]);
+      taken[x] = true;
+    }
+    return result;
+  }
+
+
 
   $("#btnPage1").click(function () {
     $("#page2").hide();
@@ -106,12 +172,12 @@
             <div class="col">
                 <div class="card h-100">
                     <img src="${image_url}"
-                        class="card-img-top" alt="...">
+               class="card-img-top" alt="...">
                     <div class="card-body">
-                        <h5 class="card-title">${name}</h5>
-                        <p class="card-text">키: ${height}</p>
-                        <p class="card-text">몸무게: ${weight}</p>
-                        <p class="card-text">실력: ${skillfullness}</p>
+                      <h5 class="card-title">${name}</h5>
+                      <p class="card-text">키: ${height}</p>
+                       <p class="card-text">몸무게: ${weight}</p>
+                       <p class="card-text">실력: ${skillfullness}</p>
                     </div>
                 </div>
             </div>
@@ -139,7 +205,7 @@
     margin: 0 auto;
   }
 
-  /*제목부분시작*/
+  /*제목부분*/
   .header {
 
     height: 300px;
@@ -167,7 +233,7 @@
     position: relative;
   }
 
-  /*제목부분끝*/
+  /*제목부분*/
 
   .button-wrapper {
     display: flex;
@@ -196,21 +262,59 @@
 
   #page2 {
     display: none;
+    text-align: center;
   }
 
-  #playerCards2 {
-    font-size: 30px;
-    width: 1000px;
+
+
+  /* 모달 스타일 */
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    font-size: 20px;
   }
+
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 30%;
+  }
+
+  /* 모달 종료 버튼 스타일 */
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 50px;
+    font-weight: bold;
+  }
+
+  /* 모달 스타일 끝*/
+
 
   .tournament {
     background-color: blanchedalmond;
     height: 750px;
-
-
-    background-image: url(https://i.ibb.co/M7389vv/image.png);
     background-position: center;
     background-size: cover;
+  }
+
+  .image {
+    background-image: url(https://i.ibb.co/GHJxTTV/image.png);
+    background-position: center;
+    background-size: cover;
+    margin-left: 650px;
+
+    width: 430px;
+    height: 740px
   }
 
   .group {
@@ -227,8 +331,9 @@
     border-radius: 50%;
     background-color: pink;
     position: relative;
-    left: 75px;
-    top: 75px;
+    left: 675px;
+    top: -650px;
+    text-align: left;
 
 
 
@@ -237,73 +342,12 @@
 
   .playerprofile h5 {
     position: relative;
-    top: 170px;
-    left: 30px;
+    top: -200px;
+    left: -1000px;
 
   }
 
-  .playerprofile2 {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    background-color: black;
-    position: relative;
-    left: 225px;
-    top: -70px;
-
-
-  }
-
-  .playerprofile2 h5 {
-    position: relative;
-    top: 170px;
-    left: 30px;
-
-  }
-
-  .playerprofile3 {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    background-color: beige;
-    position: relative;
-    left: 225px;
-    top: 225px;
-
-
-  }
-
-  .playerprofile3 h5 {
-    position: relative;
-    top: -40px;
-    left: 30px;
-  }
-
-  .playerprofile4 {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    background-color: mintcream;
-    position: relative;
-    left: 75px;
-    top: 75px;
-
-
-  }
-
-  .playerprofile4 h5 {
-    position: relative;
-    top: -40px;
-    left: 30px;
-
-  }
-
-
-
-
-  .tournament>button {
-    margin: 550px 500px 100px 800px;
-  }
+  
 </style>
 
 <body>
@@ -320,7 +364,7 @@
 
   <div id="page1" style="font-size: 20px; color: #000000;">
     선수 등록 코드 작성
-    <button id="registeringbtn" type="button">등록하기</button>
+    <button id="modalBtn">선수 정보 입력</button>
 
     <div class="playerCards">
       <div class="row row-cols-1 row-cols-md-4 g-4" id="playerCards">
@@ -329,77 +373,70 @@
     </div>
   </div>
 
-  <div id="page2" style="font-size: 20px; color: #000000;">
+  <!-- 모달 -->
+  <div id="myModal" class="modal" id="registering_modal">
+    <div class="modal-content">
+      <form>
+        <p>선수 등록 창</p>
+        <label for="name">이미지 주소:</label><br>
+        <input type="text" id="image_url" name="image_url"><br>
 
-    <div class="tournament" id="tournament">
-      <div class="group">
-        <div class="playerprofile">
-          <h5>플레이어1(5)</h5>
-        </div>
-        <div class="playerprofile2">
-          <h5>플레이어2(5)</h5>
-        </div>
-        <div class="playerprofile3">
-          <h5>플레이어3(5)</h5>
-        </div>
-        <div class="playerprofile4">
-          <h5>플레이어4(5)</h5>
-        </div>
-      </div>
+        <label for="name">이름:</label><br>
+        <input type="text" id="name" name="name"><br>
 
-      <div class="group">
-        <div class="playerprofile">
-          <h5>플레이어1(5)</h5>
-        </div>
-        <div class="playerprofile2">
-          <h5>플레이어2(5)</h5>
-        </div>
-        <div class="playerprofile3">
-          <h5>플레이어3(5)</h5>
-        </div>
-        <div class="playerprofile4">
-          <h5>플레이어4(5)</h5>
-        </div>
-      </div>
+        <label for="age">나이:</label><br>
+        <input type="number" id="age" name="age"><br>
 
-      <div class="group">
-        <div class="playerprofile">
-          <h5>플레이어1(5)</h5>
-        </div>
-        <div class="playerprofile2">
-          <h5>플레이어2(5)</h5>
-        </div>
-        <div class="playerprofile3">
-          <h5>플레이어3(5)</h5>
-        </div>
-        <div class="playerprofile4">
-          <h5>플레이어4(5)</h5>
-        </div>
-      </div>
+        <label for="height">신장:</label><br>
+        <input type="number" id="height" name="height"><br>
 
-      <div class="group">
-        <div class="playerprofile">
-          <h5>플레이어1(5)</h5>
-        </div>
-        <div class="playerprofile2">
-          <h5>플레이어2(5)</h5>
-        </div>
-        <div class="playerprofile3">
-          <h5>플레이어3(5)</h5>
-        </div>
-        <div class="playerprofile4">
-          <h5>플레이어4(5)</h5>
-        </div>
-      </div>
+        <label for="weight">몸무게:</label><br>
+        <input type="number" id="weight" name="weight"><br>
 
+        <label for="skillfullness">실력:</label><br>
+        <input type="number" id="skillfullness" name="skillfullness"><br>
 
+        <input type="button" value="제출" id="registeringbtn">
+        <button type="button" class="btn-close" id="close_modal">닫기</button>
+      </form>
     </div>
+  </div>
+  <!-- 모달 끝-->
+
+  <div id="page2" style="font-size: 20px; color: #000000;">
+    실력별 대진표 생성
+
+    <!-- skillfullness를 선택할 수 있는 드롭다운 메뉴 -->
+    <select id="skillDropdown">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+    </select>
+
+
     <button id="tablebtn" type="button">대진표 생성</button>
 
-    <div class="playerCards2">
-      <div class="row row-cols-1 row-cols-md-2 g-2" id="playerCards2">
+    <div class="tournament" id="tournament">
+      <div class="image"></div>
+
+      <div class="group" id="group">
 
       </div>
+    </div>
+  </div>
+
+
+  </div>
+  <button id="tablebtn" type="button">대진표 생성</button>
+
+  <div class="playerCards2">
+    <div class="row row-cols-1 row-cols-md-2 g-2" id="playerCards2">
+
+    </div>
+
+
 
 
 </body>
