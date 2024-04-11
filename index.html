@@ -57,18 +57,23 @@
       let skillfullness = row['skillfullness'];
 
       let tempCard = `            
-            <div class="col">
-                <div class="card h-100">
-                    <img src="${image_url}"
-                        class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title">${name}</h5>
-                        <p class="card-text">실력: ${skillfullness}</p>
-                    </div>
-                </div>
-            </div>
+      <div class="group">
+        <div class="playerprofile">          
+          <h5>${name}(${skillfullness})</h5>
+        </div>
+        <div class="playerprofile2">          
+          <h5>${name}(${skillfullness})</h5>
+        </div>
+        <div class="playerprofile3">          
+          <h5>${name}(${skillfullness})</h5>
+        </div>
+        <div class="playerprofile4">          
+          <h5>${name}(${skillfullness})</h5>
+        </div>
+      </div>
             `
-      $('#playerCards2').append(tempCard)
+      $('#tournament').empty();
+      $('#tournament').append(tempCard);
       console.log(image_url, name);
     });
   })
@@ -133,7 +138,8 @@
     width: 100%;
     margin: 0 auto;
   }
-/*제목부분*/
+
+  /*제목부분시작*/
   .header {
 
     height: 300px;
@@ -157,11 +163,11 @@
     padding-top: 100px;
     color: black;
     text-align: center;
-    
+
     position: relative;
   }
 
-  /*제목부분*/
+  /*제목부분끝*/
 
   .button-wrapper {
     display: flex;
@@ -196,18 +202,120 @@
     font-size: 30px;
     width: 1000px;
   }
+
+  .tournament {
+    background-color: blanchedalmond;
+    height: 750px;
+
+
+    background-image: url(https://i.ibb.co/M7389vv/image.png);
+    background-position: center;
+    background-size: cover;
+  }
+
+  .group {
+    display: inline-block;
+
+    margin-left: 251px;
+    position: relative;
+    left: -245px
+  }
+
+  .playerprofile {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: pink;
+    position: relative;
+    left: 75px;
+    top: 75px;
+
+
+
+
+  }
+
+  .playerprofile h5 {
+    position: relative;
+    top: 170px;
+    left: 30px;
+
+  }
+
+  .playerprofile2 {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: black;
+    position: relative;
+    left: 225px;
+    top: -70px;
+
+
+  }
+
+  .playerprofile2 h5 {
+    position: relative;
+    top: 170px;
+    left: 30px;
+
+  }
+
+  .playerprofile3 {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: beige;
+    position: relative;
+    left: 225px;
+    top: 225px;
+
+
+  }
+
+  .playerprofile3 h5 {
+    position: relative;
+    top: -40px;
+    left: 30px;
+  }
+
+  .playerprofile4 {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: mintcream;
+    position: relative;
+    left: 75px;
+    top: 75px;
+
+
+  }
+
+  .playerprofile4 h5 {
+    position: relative;
+    top: -40px;
+    left: 30px;
+
+  }
+
+
+
+
+  .tournament>button {
+    margin: 550px 500px 100px 800px;
+  }
 </style>
 
 <body>
   <div class="header">
-        <h1>Badminton<br>Team Matching System</h1>
-      </div>
-   
+    <h1>Badminton<br>Team Matching System</h1>
+  </div>
 
-    <div class="button-wrapper">
-      <div class="button" id="btnPage1">선수 등록</div>
-      <div class="button" id="btnPage2">대진표 생성</div>
-    </div>
+
+  <div class="button-wrapper">
+    <div class="button" id="btnPage1">선수 등록</div>
+    <div class="button" id="btnPage2">대진표 생성</div>
+  </div>
   </div>
 
   <div id="page1" style="font-size: 20px; color: #000000;">
@@ -222,13 +330,78 @@
   </div>
 
   <div id="page2" style="font-size: 20px; color: #000000;">
-    대진표 생성 코드 작성
+
+    <div class="tournament" id="tournament">
+      <div class="group">
+        <div class="playerprofile">
+          <h5>플레이어1(5)</h5>
+        </div>
+        <div class="playerprofile2">
+          <h5>플레이어2(5)</h5>
+        </div>
+        <div class="playerprofile3">
+          <h5>플레이어3(5)</h5>
+        </div>
+        <div class="playerprofile4">
+          <h5>플레이어4(5)</h5>
+        </div>
+      </div>
+
+      <div class="group">
+        <div class="playerprofile">
+          <h5>플레이어1(5)</h5>
+        </div>
+        <div class="playerprofile2">
+          <h5>플레이어2(5)</h5>
+        </div>
+        <div class="playerprofile3">
+          <h5>플레이어3(5)</h5>
+        </div>
+        <div class="playerprofile4">
+          <h5>플레이어4(5)</h5>
+        </div>
+      </div>
+
+      <div class="group">
+        <div class="playerprofile">
+          <h5>플레이어1(5)</h5>
+        </div>
+        <div class="playerprofile2">
+          <h5>플레이어2(5)</h5>
+        </div>
+        <div class="playerprofile3">
+          <h5>플레이어3(5)</h5>
+        </div>
+        <div class="playerprofile4">
+          <h5>플레이어4(5)</h5>
+        </div>
+      </div>
+
+      <div class="group">
+        <div class="playerprofile">
+          <h5>플레이어1(5)</h5>
+        </div>
+        <div class="playerprofile2">
+          <h5>플레이어2(5)</h5>
+        </div>
+        <div class="playerprofile3">
+          <h5>플레이어3(5)</h5>
+        </div>
+        <div class="playerprofile4">
+          <h5>플레이어4(5)</h5>
+        </div>
+      </div>
+
+
+    </div>
     <button id="tablebtn" type="button">대진표 생성</button>
 
     <div class="playerCards2">
       <div class="row row-cols-1 row-cols-md-2 g-2" id="playerCards2">
 
       </div>
+
+
 </body>
 
 </html>
